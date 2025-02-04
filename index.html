@@ -1,65 +1,54 @@
-
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أنا هنا</title>
+    <title>Student Name on Image</title>
     <style>
-        body { text-align: center; font-family: Arial, sans-serif; direction: rtl; }
-        #preview img { margin-top: 20px; width: 100%; max-width: 400px; }
-        input { padding: 10px; margin: 10px; font-size: 18px; }
-        button { padding: 10px 20px; font-size: 18px; cursor: pointer; }
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 1px solid black;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-    <h2>اكتب اسمك لتحصل على صورة المشاركة</h2>
-    <input type="text" id="nameInput" placeholder="اكتب اسمك هنا">
-    <button onclick="generateImage()">إنشاء الصورة</button>
-    <br><br>
-    <canvas id="canvas" width="600" height="400" style="display:none;"></canvas>
-    <div id="preview"></div>
+
+    <h2>Enter Your Name</h2>
+    <input type="text" id="studentName" placeholder="Enter your name">
+    <button onclick="drawName()">Generate</button>
+    
+    <br>
+    <canvas id="nameCanvas"></canvas>
 
     <script>
-        function generateImage() {
-            const name = document.getElementById('nameInput').value.trim();
-            if (!name) { alert("يرجى إدخال الاسم!"); return; }
+        function drawName() {
+            let name = document.getElementById("studentName").value;
+            let canvas = document.getElementById("nameCanvas");
+            let ctx = canvas.getContext("2d");
+            
+            let img = new Image();
+            img.crossOrigin = "Anonymous"; // Ensure cross-origin access if needed
+            img.src = "https://drive.google.com/uc?export=view&id=1JIk7pMINE9l6GAorspsX2PNQswfEX4HV"; // Use a proper direct link
 
-            const canvas = document.getElementById('canvas');
-            const ctx = canvas.getContext('2d');
+            img.onload = function() {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
 
-            // إضافة الصورة كخلفية
-            const backgroundImg = new Image();
-            backgroundImg.src = 'https://drive.google.com/uc?id=1JIk7pMINE9l6GAorspsX2PNQswfEX4HV'; // رابط الصورة المعدل
-            backgroundImg.onload = function() {
-                ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
-
-                // نص "أنا هناك"
-                ctx.fillStyle = "#000";
-                ctx.font = "bold 40px Arial";
-                ctx.fillText("أنا هناك", 220, 50);
-
-                // إضافة اسم المستخدم
+                // Text styling
                 ctx.font = "30px Arial";
-                ctx.fillText(name, 250, 200);
+                ctx.fillStyle = "red";
+                ctx.textAlign = "center";
 
-                // تحويل إلى صورة
-                const img = new Image();
-                img.src = canvas.toDataURL();
-                img.onload = function() {
-                    document.getElementById('preview').innerHTML = "";
-                    document.getElementById('preview').appendChild(img);
-
-                    // زر تحميل الصورة
-                    const downloadLink = document.createElement("a");
-                    downloadLink.href = img.src;
-                    downloadLink.download = "أنا_هنا.png";
-                    downloadLink.innerText = "تحميل الصورة";
-                    document.getElementById('preview').appendChild(document.createElement("br"));
-                    document.getElementById('preview').appendChild(downloadLink);
-                };
+                // Position the name on the image
+                ctx.fillText(name, canvas.width / 2, canvas.height - 50);
             };
         }
     </script>
+
 </body>
 </html>
